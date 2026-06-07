@@ -122,6 +122,8 @@ const products: Product[] = [
   { id: 3, name: "طباشير Master", price: 25, description: "طباشير Master الأصلي للبيلياردو. قبضة ممتازة ويمنع الانزلاق.", image: "/images/master-chalk.jpg", category: "billiard" },
   { id: 4, name: "كرة بابي فوت", price: 30, description: "كرة بابي فوت احترافية مصنوعة من مواد متينة للتحكم الدقيق.", image: "/images/foosball-ball.jpg", category: "foosball" },
   { id: 5, name: "مقبض بابي فوت", price: 40, description: "مقبض بابي فوت مريح ومتين بتصميم أنيق يوفر قبضة محكمة.", image: "/images/foosball-handle.jpg", category: "foosball" },
+  { id: 6, name: "كرة بابي فوت", price: 30, description: "كرة بابي فوت احترافية مصنوعة من مواد متينة للتحكم الدقيق.", image: "/images/foosball-ball.jpg", category: "foosball" },
+  { id: 7, name: "مقبض بابي فوت", price: 40, description: "مقبض بابي فوت مريح ومتين بتصميم أنيق يوفر قبضة محكمة.", image: "/images/foosball-handle.jpg", category: "foosball" },
 ];
 
 const saleProducts: SaleProduct[] = [
