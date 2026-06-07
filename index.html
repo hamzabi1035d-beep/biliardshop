@@ -189,7 +189,6 @@ var PRODUCTS = [
   { name:"طباشير Master", price:25, desc:"طباشير Master الأصلي للبيلياردو", img:"images/master-chalk.jpg", cat:"billiard" },
   { name:"كرة بابي فوت", price:30, desc:"كرة بابي فوت احترافية مصنوعة من مواد متينة", img:"images/foosball-ball.jpg", cat:"foosball" },
   { name:"مقبض بابي فوت", price:40, desc:"مقبض بابي فوت مريح ومتين", img:"images/foosball-handle.jpg", cat:"foosball" }
-  { name:"كرة ", price:100, desc:"كرة  مصنوعة من مواد متينة", img:"images/foosball-ball.jpg", cat:"foosball" },
 ];
 
 // ── منتجات العروض ──
@@ -197,6 +196,10 @@ var PRODUCTS = [
 var SALES = [
   { name:"طقم كرات بيلياردو 16 كرة", oldPrice:1200, price:850, discount:29, desc:"طقم كرات بيلياردو احترافي كامل 16 كرة", img:"images/billiard-ball.jpg", cat:"billiard", badge:"الأكثر مبيعاً 🔥" },
   { name:"ستيك خشب زان فاخر", oldPrice:600, price:420, discount:30, desc:"ستيك خشب الزان الطبيعي بتصميم أنيق", img:"images/billiard-cue.jpg", cat:"billiard", badge:"عرض حصري ⭐" },
+  { name:"علبة طباشير Master x12", oldPrice:300, price:200, discount:33, desc:"علبة طباشير Master الأصلي 12 قطعة", img:"images/master-chalk.jpg", cat:"billiard", badge:"خصم خاص 💎" },
+  { name:"طقم كرات بابي فوت 10 كرات", oldPrice:250, price:160, discount:36, desc:"طقم كرات بابي فوت متين ومتوازن", img:"images/foosball-ball.jpg", cat:"foosball", badge:"كمية محدودة ⏰" },
+  { name:"4 مقابض بابي فوت", oldPrice:180, price:120, discount:33, desc:"4 مقابض بابي فوت أصلية بقبضة مريحة", img:"images/foosball-handle.jpg", cat:"foosball", badge:"الأكثر طلباً 🏆" },
+  { name:"قماش طاولة Speed Pro", oldPrice:1500, price:1100, discount:27, desc:"قماش بيلياردو احترافي Speed Pro", img:"images/billiard-cue.jpg", cat:"billiard", badge:"جديد 🆕" }
 ];
 
 // ── السلة ──
@@ -217,6 +220,13 @@ function uBadge(){
   if(r.t>0){f.classList.remove("hidden");document.getElementById("fCnt").textContent="السلة ("+r.t+")";document.getElementById("fTot").textContent=r.g+" DH"}
   else{f.classList.add("hidden")}
 }
+
+// تشفير HTML باش الحروف الخاصة ماتخرّبش الصفحة
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+
+// زيد للسلة من رقم فـ ARRAY (ماتعدّلش هاد function)
+function addSale(idx){var p=SALES[idx];addC(1000+idx,p.name,p.price,p.img,p.cat)}
+function addProd(idx){var p=PRODUCTS[idx];addC(p.id,p.name,p.price,p.img,p.cat)}
 
 function addC(id,n,p,i,c){
   var x=null;
@@ -249,7 +259,7 @@ function dCart(){
       it+='<div class="bg-gray-900/80 rounded-xl p-3 border border-gray-800 flex gap-3">';
       it+='<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-800"><img src="'+x.i+'" class="w-full h-full object-cover"></div>';
       it+='<div class="flex-1 min-w-0">';
-      it+='<h4 class="text-white text-sm font-bold line-clamp-1 mb-1">'+x.n+'</h4>';
+      it+='<h4 class="text-white text-sm font-bold line-clamp-1 mb-1">'+esc(x.n)+'</h4>';
       it+='<p class="text-bgreen-l font-bold text-sm mb-2">'+x.p+' DH</p>';
       it+='<div class="flex items-center justify-between">';
       it+='<div class="flex items-center">';
@@ -266,7 +276,7 @@ function dCart(){
   }else{
     f.classList.remove("hidden");
     var it2="";
-    for(var k=0;k<cart.length;k++){var x2=cart[k];it2+='<div class="flex justify-between text-sm"><span class="text-gray-300">'+x2.n+" × "+x2.q+'</span><span class="text-white font-bold">'+(x2.p*x2.q)+" DH</span></div>"}
+    for(var k=0;k<cart.length;k++){var x2=cart[k];it2+='<div class="flex justify-between text-sm"><span class="text-gray-300">'+esc(x2.n)+" × "+x2.q+'</span><span class="text-white font-bold">'+(x2.p*x2.q)+" DH</span></div>"}
     b.innerHTML='<div class="p-4 space-y-5"><div class="bg-gray-900/80 rounded-xl p-3.5 border border-gray-800"><div class="flex justify-between mb-2"><span class="text-gray-400 text-xs">ملخص</span><button onclick="cStep=\'cart\';dCart()" class="text-bgreen-l text-xs font-bold">تعديل</button></div><div class="space-y-1.5">'+it2+'</div><div class="border-t border-gray-700 mt-2 pt-2 flex justify-between"><span class="text-white font-bold text-sm">💰 الإجمالي</span><span class="text-bgreen-l font-black text-lg">'+r.g+' DH</span></div></div>'
     +'<div class="space-y-4"><h3 class="text-white font-bold">📋 معلومات التوصيل</h3>'
     +'<div><label class="block text-gray-400 text-xs mb-1.5">👤 الاسم الكامل *</label><input type="text" placeholder="أحمد بنعلي" value="'+cF.n+'" oninput="cF.n=this.value" class="w-full bg-gray-900 border '+(cE.n?"border-red-500":"border-gray-700")+' rounded-xl px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-bgreen/30">'+(cE.n?'<p class="text-red-400 text-xs mt-1">⚠️ '+cE.n+'</p>':'')+'</div>'
@@ -303,12 +313,11 @@ function rSales(){
     h+='</div>';
     h+='<div class="flex flex-col justify-between flex-1 p-3 sm:p-4 min-w-0"><div>';
     if(p.badge)h+='<span class="bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-[8px] px-1.5 py-0.5 rounded sm:hidden inline-block mb-1">'+p.badge+'</span>';
-    h+='<h3 class="text-xs sm:text-base font-bold text-white mb-1 group-hover:text-red-400 line-clamp-2">'+p.name+'</h3>';
-    h+='<p class="text-gray-500 text-[10px] sm:text-xs line-clamp-1 mb-2">'+p.desc+'</p></div>';
+    h+='<h3 class="text-xs sm:text-base font-bold text-white mb-1 group-hover:text-red-400 line-clamp-2">'+esc(p.name)+'</h3>';
+    h+='<p class="text-gray-500 text-[10px] sm:text-xs line-clamp-1 mb-2">'+esc(p.desc)+'</p></div>';
     h+='<div class="mb-2"><div class="flex items-end gap-1.5"><span class="text-base sm:text-xl font-black text-red-400">'+p.price+' <span class="text-[9px] sm:text-xs text-gray-500">DH</span></span><span class="text-[10px] text-gray-600 line-through">'+p.oldPrice+' DH</span></div>';
     h+='<span class="text-[9px] text-red-400 font-bold">وفّر '+(p.oldPrice-p.price)+' DH</span></div>';
-    h+='<button onclick="addC('+pk+',\''+p.name.replace(/'/g," ")+
-'\','+p.price+',\''+p.img+'\',\''+p.cat+'\')" class="inline-flex items-center gap-1 bg-bgreen hover:bg-bgreen-d text-white font-bold px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl text-[11px] sm:text-sm shadow-lg active:scale-95">+ أضف للسلة</button>';
+    h+='<button onclick="addSale('+k+')" class="inline-flex items-center gap-1 bg-bgreen hover:bg-bgreen-d text-white font-bold px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl text-[11px] sm:text-sm shadow-lg active:scale-95">+ أضف للسلة</button>';
     h+='</div></div>'
   }
   g.innerHTML=h
@@ -325,11 +334,10 @@ function rProds(cat){
     h+='<div class="absolute bottom-2 left-2 bg-bgreen text-white font-bold px-2.5 py-1 rounded-lg text-xs shadow-lg hidden sm:block">'+p.price+' DH</div></div>';
     h+='<div class="flex flex-col justify-between flex-1 p-3 sm:p-4 min-w-0"><div>';
     h+='<div class="flex items-center gap-1 mb-1 sm:hidden"><span class="text-xs">'+(p.cat==="billiard"?"🎱":"⚽")+'</span><span class="text-gray-500 text-[9px]">'+(p.cat==="billiard"?"بيلياردو":"بابي فوت")+'</span></div>';
-    h+='<h3 class="text-xs sm:text-base font-bold text-white mb-1 group-hover:text-bgreen-l line-clamp-2">'+p.name+'</h3>';
-    h+='<p class="text-gray-500 text-[10px] sm:text-xs line-clamp-1 mb-2">'+p.desc+'</p></div>';
+    h+='<h3 class="text-xs sm:text-base font-bold text-white mb-1 group-hover:text-bgreen-l line-clamp-2">'+esc(p.name)+'</h3>';
+    h+='<p class="text-gray-500 text-[10px] sm:text-xs line-clamp-1 mb-2">'+esc(p.desc)+'</p></div>';
     h+='<div class="flex items-center justify-between gap-1.5 mt-auto"><span class="text-base sm:text-xl font-black text-bgreen-l">'+p.price+' <span class="text-[9px] sm:text-xs text-gray-500">DH</span></span>';
-    h+='<button onclick="addC('+p.id+',\''+p.name.replace(/'/g," ")+
-'\','+p.price+',\''+p.img+'\',\''+p.cat+'\')" class="inline-flex items-center gap-1 bg-bgreen hover:bg-bgreen-d text-white font-bold px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl text-[11px] sm:text-sm shadow-lg active:scale-95">+ أضف للسلة</button>';
+    h+='<button onclick="addProd('+k+')" class="inline-flex items-center gap-1 bg-bgreen hover:bg-bgreen-d text-white font-bold px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl text-[11px] sm:text-sm shadow-lg active:scale-95">+ أضف للسلة</button>';
     h+='</div></div></div>'
   }
   g.innerHTML=h
