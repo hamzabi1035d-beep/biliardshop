@@ -1,11 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Billiard Store Morocco</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
 <script>
+tailwind.config={theme:{extend:{colors:{'bgreen':'#1a8f3e','bgreen-d':'#147030','bgreen-l':'#22c55e','bblack':'#0a0a0a','bdark':'#1a1a1a','bgray':'#2a2a2a'}}}}
+</script>
+<style>
+*{font-family:'Cairo',sans-serif;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}body{direction:rtl}
+.line-clamp-1{overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
+.line-clamp-2{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+@keyframes su{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pg{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.7)}70%{box-shadow:0 0 0 12px rgba(34,197,94,0)}}
+.as{animation:su .6s ease-out}.ap{animation:pg 2s infinite}
+.tg{background:linear-gradient(135deg,#22c55e,#1a8f3e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+</style>
+</head>
+<body class="bg-bblack text-white pb-14 sm:pb-0">
+
+<!--
+╔═══════════════════════════════════════════════════╗
+║  🎱 كيفاش تزيد/تبدّل منتج:                        ║
+║                                                   ║
+║  1. حط الصورة فـ dossier images/                  ║
+║  2. ابحث على PRODUCTS (منتجات عادية)              ║
+║     ولا SALE_PRODUCTS (عروض)                      ║
+║  3. انسخ واحد وبدّل:                              ║
+║     - name  = اسم                                 ║
+║     - price = الثمن                               ║
+║     - desc  = الوصف                               ║
+║     - img   = images/الصورة.jpg                   ║
+║     - cat   = billiard ولا foosball               ║
+║                                                   ║
+║  للعروض زيد أيضا:                                 ║
+║     - oldPrice = الثمن القديم                      ║
+║     - discount = نسبة %                           ║
+║     - badge    = "عرض خاص 🔥"                     ║
+║                                                   ║
+║  PHONE = رقم التلفون                              ║
+║  DELIVERY_FEE = رسوم التوصيل                      ║
+╚═══════════════════════════════════════════════════╝
+-->
+
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed top-0 right-0 left-0 z-40 transition-all duration-300">
+<div class="max-w-[75%] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-14 sm:h-20">
+<a href="#hero" class="flex items-center gap-2"><span class="text-2xl sm:text-3xl">🎱</span><span class="text-base sm:text-xl font-bold">Billiard <span class="text-bgreen-l">Store</span></span></a>
+<div class="hidden md:flex items-center gap-8">
+<a href="#hero" class="text-sm text-gray-300 hover:text-bgreen-l">الرئيسية</a>
+<a href="#sales" class="text-sm text-red-400 hover:text-red-300">العروض</a>
+<a href="#products" class="text-sm text-gray-300 hover:text-bgreen-l">المنتجات</a>
+<a href="#about" class="text-sm text-gray-300 hover:text-bgreen-l">من نحن</a>
+<a href="#contact" class="text-sm text-gray-300 hover:text-bgreen-l">اتصل بنا</a>
+</div>
+<div class="flex items-center gap-1">
+<button onclick="openCart()" class="relative text-white p-2 rounded-lg hover:bg-white/5 active:scale-90">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+<span id="cartBadge" class="hidden absolute -top-0.5 -left-0.5 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full items-center justify-center animate-pulse">0</span>
+</button>
+<button onclick="toggleMenu()" class="md:hidden text-white p-2 rounded-lg active:bg-gray-800">
+<svg id="menuIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+</div>
+</div></div></nav>
+
+<!-- MOBILE MENU -->
+<div id="mobileMenu" class="fixed inset-0 z-40 md:hidden transition-all duration-300 opacity-0 invisible">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleMenu()"></div>
+<div id="menuDrawer" class="absolute top-0 right-0 w-72 h-full bg-bblack border-l border-gray-800 shadow-2xl transition-transform duration-300 translate-x-full">
+<div class="pt-20 pb-6 px-5">
+<div class="flex items-center gap-2 mb-8 pb-6 border-b border-gray-800"><span class="text-3xl">🎱</span><span class="text-lg font-bold">Billiard <span class="text-bgreen-l">Store</span></span></div>
+<div class="space-y-1">
+<a href="#hero" onclick="toggleMenu()" class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-gray-300 hover:text-bgreen-l hover:bg-gray-800/60">🏠 الرئيسية</a>
+<a href="#sales" onclick="toggleMenu()" class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-red-400 hover:bg-red-500/10">🔥 العروض</a>
+<a href="#products" onclick="toggleMenu()" class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-gray-300 hover:text-bgreen-l hover:bg-gray-800/60">🛒 المنتجات</a>
+<a href="#about" onclick="toggleMenu()" class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-gray-300 hover:text-bgreen-l hover:bg-gray-800/60">ℹ️ من نحن</a>
+<a href="#contact" onclick="toggleMenu()" class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-gray-300 hover:text-bgreen-l hover:bg-gray-800/60">📞 اتصل بنا</a>
+</div>
+<div class="mt-8 pt-6 border-t border-gray-800"><a href="https://wa.me/212717657640" target="_blank" class="flex items-center justify-center gap-2 bg-bgreen text-white font-bold py-3.5 rounded-xl w-full">💬 واتساب</a></div>
+</div></div></div>
+
+<!-- HERO -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0"><img src="images/hero-billiard.jpg" class="w-full h-full object-cover" onerror="this.style.display='none'"><div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-bblack"></div></div>
+<div class="relative z-10 max-w-[75%] mx-auto px-5 text-center pt-16 pb-24 sm:pt-0 sm:pb-0 as">
+<h1 class="text-3xl sm:text-5xl md:text-7xl font-black text-white mb-4 sm:mb-6 leading-tight">🎲 كل ما تحتاجه<br>لطاولة <span class="tg">البيلياردو</span><br>و<span class="tg">بابي فوت</span></h1>
+<p class="text-gray-400 text-sm sm:text-lg max-w-xl mx-auto mb-8">بيع جميع مستلزمات البيلياردو وبابي فوت بجودة عالية وأسعار تنافسية. شحن لجميع مدن المغرب</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-3 px-2">
+<a href="#sales" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold px-6 py-3.5 rounded-xl text-base shadow-lg active:scale-95">🔥 تصفح العروض</a>
+<a href="#products" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-bgreen hover:bg-bgreen-d text-white font-bold px-6 py-3.5 rounded-xl text-base shadow-lg active:scale-95">تصفح المنتجات</a>
+<a href="https://wa.me/212717657640" target="_blank" class="w-full sm:w-auto flex items-center justify-center gap-2 border-2 border-gray-600 hover:border-bgreen-l text-white font-bold px-6 py-3.5 rounded-xl text-base active:scale-95">واتساب</a>
+</div>
+</div></section>
+
+<!-- SALES -->
+<section id="sales" class="relative py-12 sm:py-28 overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-red-950/30 via-bblack to-bblack"></div>
+<div class="relative max-w-[75%] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-8 sm:mb-14"><span class="text-red-400 text-sm font-bold bg-red-500/15 border border-red-500/30 rounded-full px-4 py-1.5">🔥 عروض حصرية 🔥</span><h2 class="text-3xl sm:text-5xl font-black text-white mt-4"><span class="text-red-400">عروض</span> حصرية</h2></div>
+<div id="salesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8"></div>
+</div></section>
+
+<!-- PRODUCTS -->
+<section id="products" class="py-12 sm:py-28 bg-bblack">
+<div class="max-w-[75%] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-8 sm:mb-12"><h2 class="text-2xl sm:text-4xl font-black text-white mb-2">أحدث <span class="tg">المنتجات</span></h2></div>
+<div class="flex items-center justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
+<button onclick="filterProducts('all')" data-f="all" class="fbtn bg-bgreen text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm active:scale-95">الكل</button>
+<button onclick="filterProducts('billiard')" data-f="billiard" class="fbtn bg-gray-800 text-gray-400 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm active:scale-95">🎱 بيلياردو</button>
+<button onclick="filterProducts('foosball')" data-f="foosball" class="fbtn bg-gray-800 text-gray-400 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm active:scale-95">⚽ بابي فوت</button>
+</div>
+<div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8"></div>
+</div></section>
+
+<!-- ABOUT -->
+<section id="about" class="py-12 sm:py-28 bg-bdark">
+<div class="max-w-[75%] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-8 sm:mb-16"><h2 class="text-2xl sm:text-4xl font-black text-white mb-2">من <span class="tg">نحن</span>؟</h2></div>
+<div class="max-w-3xl mx-auto"><div class="bg-gradient-to-br from-gray-900 to-bgray rounded-2xl p-5 sm:p-12 border border-gray-800 text-center">
+<div class="w-16 h-16 sm:w-20 sm:h-20 bg-bgreen/20 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl mx-auto mb-4 sm:mb-6">🎱</div>
+<p class="text-gray-300 text-sm sm:text-xl mb-6 sm:mb-8">نحن متخصصون في بيع جميع مستلزمات البيلياردو وبابي فوت داخل المغرب مع إمكانية الشحن لجميع المدن. نقدم منتجات عالية الجودة بأسعار تنافسية مع خدمة عملاء مميزة وتوصيل سريع 🇲🇦</p>
+<div class="grid grid-cols-2 gap-2.5 sm:gap-4">
+<div class="bg-gray-800/50 rounded-lg p-3 sm:p-4 border border-gray-700/50"><div class="text-xl sm:text-2xl mb-1">✅</div><div class="text-gray-400 text-xs sm:text-sm">جودة عالية</div></div>
+<div class="bg-gray-800/50 rounded-lg p-3 sm:p-4 border border-gray-700/50"><div class="text-xl sm:text-2xl mb-1">💰</div><div class="text-gray-400 text-xs sm:text-sm">أسعار تنافسية</div></div>
+<div class="bg-gray-800/50 rounded-lg p-3 sm:p-4 border border-gray-700/50"><div class="text-xl sm:text-2xl mb-1">🚚</div><div class="text-gray-400 text-xs sm:text-sm">شحن سريع</div></div>
+<div class="bg-gray-800/50 rounded-lg p-3 sm:p-4 border border-gray-700/50"><div class="text-xl sm:text-2xl mb-1">🎯</div><div class="text-gray-400 text-xs sm:text-sm">منتجات أصلية</div></div>
+</div></div></div></div></section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-12 sm:py-28 bg-bblack">
+<div class="max-w-[75%] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-8 sm:mb-16"><h2 class="text-2xl sm:text-4xl font-black text-white mb-2">اتصل <span class="tg">بنا</span></h2></div>
+<div class="grid md:grid-cols-2 gap-4 sm:gap-8 max-w-4xl mx-auto">
+<div class="bg-gradient-to-br from-gray-900 to-bgray rounded-2xl p-5 sm:p-8 border border-gray-800 space-y-4">
+<a href="tel:+212717657640" class="flex items-center gap-3 p-3 -m-3 rounded-xl hover:bg-gray-800/30"><span class="w-10 h-10 sm:w-12 sm:h-12 bg-bgreen/20 rounded-lg sm:rounded-xl flex items-center justify-center text-lg">📞</span><div><div class="text-gray-500 text-xs">الهاتف</div><div class="text-white font-bold text-lg" dir="ltr">0717657640</div></div></a>
+<div class="flex items-center gap-3 p-3 -m-3"><span class="w-10 h-10 sm:w-12 sm:h-12 bg-bgreen/20 rounded-lg sm:rounded-xl flex items-center justify-center text-lg">📍</span><div><div class="text-gray-500 text-xs">الموقع</div><div class="text-white font-bold text-lg">المغرب 🇲🇦</div></div></div>
+<div class="flex items-center gap-3 p-3 -m-3"><span class="w-10 h-10 sm:w-12 sm:h-12 bg-bgreen/20 rounded-lg sm:rounded-xl flex items-center justify-center text-lg">🕐</span><div><div class="text-gray-500 text-xs">أوقات العمل</div><div class="text-white font-bold">كل يوم: 9:00 - 21:00</div></div></div>
+</div>
+<div class="bg-gradient-to-br from-bgreen/20 to-bgreen-d/20 rounded-2xl p-5 sm:p-8 border border-bgreen/30 flex flex-col items-center justify-center text-center">
+<span class="text-4xl sm:text-5xl mb-4">💬</span>
+<h3 class="text-lg sm:text-2xl font-bold mb-2">اطلب عبر واتساب</h3>
+<p class="text-gray-400 text-xs sm:text-base mb-5">تواصل معنا مباشرة عبر واتساب</p>
+<a href="https://wa.me/212717657640" target="_blank" class="w-full sm:w-auto flex items-center justify-center gap-3 bg-bgreen hover:bg-bgreen-d text-white font-bold px-6 py-3.5 rounded-xl text-base shadow-lg active:scale-95 ap">💬 <span dir="ltr">0717657640</span></a>
+</div></div></div></section>
+
+<!-- FOOTER -->
+<footer class="bg-bdark border-t border-gray-800">
+<div class="max-w-[75%] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+<div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+<div class="col-span-2 md:col-span-1"><div class="flex items-center gap-2 mb-3"><span class="text-2xl">🎱</span><span class="text-lg font-bold">Billiard <span class="text-bgreen-l">Store</span></span></div><p class="text-gray-500 text-xs sm:text-sm">متجرك الأول في المغرب لمستلزمات البيلياردو وبابي فوت.</p></div>
+<div><h4 class="text-white font-bold text-sm mb-3">روابط</h4><ul class="space-y-1"><li><a href="#hero" class="text-gray-500 hover:text-bgreen-l text-xs sm:text-sm">الرئيسية</a></li><li><a href="#sales" class="text-gray-500 hover:text-bgreen-l text-xs sm:text-sm">العروض</a></li><li><a href="#products" class="text-gray-500 hover:text-bgreen-l text-xs sm:text-sm">المنتجات</a></li><li><a href="#about" class="text-gray-500 hover:text-bgreen-l text-xs sm:text-sm">من نحن</a></li></ul></div>
+<div><h4 class="text-white font-bold text-sm mb-3">تواصل</h4><ul class="space-y-2"><li class="text-gray-500 text-xs sm:text-sm">📞 <a href="tel:+212717657640" class="hover:text-bgreen-l" dir="ltr">0717657640</a></li><li class="text-gray-500 text-xs sm:text-sm">📍 المغرب</li><li class="text-gray-500 text-xs sm:text-sm">💬 <a href="https://wa.me/212717657640" target="_blank" class="hover:text-bgreen-l">واتساب</a></li></ul></div>
+</div>
+<div class="border-t border-gray-800 mt-8 pt-6 text-center"><p class="text-gray-600 text-xs">© 2025 Billiard Store Morocco — صنع بـ ❤️ في المغرب 🇲🇦</p></div>
+</div></footer>
+
+<!-- FLOATING -->
+<a href="https://wa.me/212717657640" target="_blank" class="fixed bottom-16 sm:bottom-6 left-5 z-30 bg-bgreen hover:bg-bgreen-d rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 ap" style="width:52px;height:52px">💬</a>
+<div id="floatingCart" class="fixed bottom-0 right-0 left-0 z-30 sm:hidden hidden"><button onclick="openCart()" class="w-full bg-bgreen text-white flex items-center justify-between px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,.5)] active:scale-[0.98]"><span class="flex items-center gap-2">🛒 <span id="fCnt" class="font-bold text-sm">السلة (0)</span></span><span class="flex items-center gap-2"><span id="fTot" class="font-black text-lg">0 DH</span><span class="text-white/60 text-xs">+50 توصيل</span></span></button></div>
+
+<!-- CART DRAWER -->
+<div id="cartOvr" class="fixed inset-0 z-50 transition-all duration-300 opacity-0 invisible">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeCart()"></div>
+<div id="cartDrw" class="absolute top-0 left-0 h-full w-full sm:w-[420px] bg-bblack border-r border-gray-800 shadow-2xl flex flex-col transition-transform duration-300 -translate-x-full">
+<div id="cHdr" class="flex items-center justify-between p-4 border-b border-gray-800 flex-shrink-0"></div>
+<div id="cBdy" class="flex-1 overflow-y-auto"></div>
+<div id="cFtr" class="border-t border-gray-800 p-4 flex-shrink-0 bg-bdark/50 hidden"></div>
+</div></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- كل JavaScript هنا تحت - ماتبداّش من هنا                -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<script>
+// ── الإعدادات ──
 var PHONE = "212717657640";
 var DELIVERY = 50;
 
-var cart = [];
-var cStep = "cart";
-var cF = { n:"", p:"", a:"" };
-var cE = { n:"", p:"", a:"" };
+// ── المنتجات العادية ──
+// name=الاسم price=الثمن desc=الوصف img=الصورة cat=billiard ولا foosball
 
 var PRODUCTS = [
   {
@@ -18,145 +195,205 @@ var PRODUCTS = [
   },
   {
     id:2,
-    name:"قفاز بيلياردو",
+    name:"قوادس",
     price:80,
     desc:"قفاز احترافي",
     img:"images/rosolba.jpg",
     cat:"billiard"
   }
 ];
-
+// ── منتجات العروض ──
+// oldPrice=الثمن القديم price=الثمن الجديد discount=النسبة % badge=وصف العرض
 var SALES = [
-  {
-    name:"طقم كرات بيلياردو 16 كرة",
-    oldPrice:1200,
-    price:850,
-    discount:29,
-    desc:"طقم احترافي كامل",
-    img:"images/billiard-ball.jpg",
-    cat:"billiard",
-    badge:"الأكثر مبيعاً 🔥"
-  }
+  { name:"طقم كرات بيلياردو 16 كرة", oldPrice:1200, price:850, discount:29, desc:"طقم كرات بيلياردو احترافي كامل 16 كرة", img:"images/billiard-ball.jpg", cat:"billiard", badge:"الأكثر مبيعاً 🔥" },
+  { name:"ستيك خشب زان فاخر", oldPrice:600, price:420, discount:30, desc:"ستيك خشب الزان الطبيعي بتصميم أنيق", img:"images/billiard-cue.jpg", cat:"billiard", badge:"عرض حصري ⭐" },
+  
 ];
 
-// ================= CORE FIX =================
-
-function esc(s){
-  return String(s).replace(/&/g,"&amp;")
-                  .replace(/</g,"&lt;")
-                  .replace(/>/g,"&gt;");
-}
-
-// FIX: add product
+// ── السلة ──
 function addProd(idx){
   var p = PRODUCTS[idx];
-  addC(p.id, p.name, p.price, p.img, p.cat);
+  addC(idx, p.name, p.price, p.img, p.cat);
 }
 
-// FIX: add sale
-function addSale(idx){
-  var p = SALES[idx];
-  addC("sale_"+idx, p.name, p.price, p.img, p.cat);
-}
-
-// CART CORE
-function addC(id,n,p,i,c){
-  var x = cart.find(e=>e.id===id);
-  if(x) x.q++;
-  else cart.push({id,n,p,i,c,q:1});
-  uBadge();
-  dCart();
-}
-
-function rmC(id){
-  cart = cart.filter(x=>x.id!==id);
-  uBadge();
-  dCart();
-}
-
-function uqC(id,q){
-  if(q<1){ rmC(id); return; }
-  var x = cart.find(e=>e.id===id);
-  if(x) x.q = q;
-  uBadge();
-  dCart();
-}
-
-function clrC(){
-  cart = [];
-  uBadge();
-  dCart();
-}
-
-// TOTAL
 function tot(){
   var t=0,s=0;
-  cart.forEach(x=>{
-    t += x.q;
-    s += x.q*x.p;
-  });
-  return {t,s,d:cart.length?DELIVERY:0,g:s+(cart.length?DELIVERY:0)};
+  for(var i=0;i<cart.length;i++){t+=cart[i].q;s+=cart[i].p*cart[i].q}
+  return {t:t,s:s,d:cart.length?DELIVERY:0,g:s+(cart.length?DELIVERY:0)}
 }
 
-// BADGE
 function uBadge(){
-  var r = tot();
-  var b = document.getElementById("cartBadge");
-  if(!b) return;
-
-  if(r.t>0){
-    b.className="absolute -top-1 -left-1 bg-red-500 w-5 h-5 flex items-center justify-center rounded-full text-xs";
-    b.textContent = r.t>9?"+9":r.t;
-  }else{
-    b.className="hidden";
-  }
+  var r=tot();
+  var b=document.getElementById("cartBadge");
+  if(r.t>0){b.textContent=r.t>9?"+9":r.t;b.className="absolute -top-0.5 -left-0.5 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center animate-pulse"}
+  else{b.className="hidden"}
+  var f=document.getElementById("floatingCart");
+  if(r.t>0){f.classList.remove("hidden");document.getElementById("fCnt").textContent="السلة ("+r.t+")";document.getElementById("fTot").textContent=r.g+" DH"}
+  else{f.classList.add("hidden")}
 }
 
-// ================= CART UI =================
+// تشفير HTML باش الحروف الخاصة ماتخرّبش الصفحة
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
 
-function openCart(){
-  var o = document.getElementById("cartOvr");
-  if(o){
-    o.classList.remove("hidden");
-    o.style.display="block";
-  }
-  dCart();
-}
+// زيد للسلة من رقم فـ ARRAY (ماتعدّلش هاد function)
+function addSale(idx){var p=SALES[idx];addC(1000+idx,p.name,p.price,p.img,p.cat)}
+function addProd(idx){var p=PRODUCTS[idx];addC(p.id,p.name,p.price,p.img,p.cat)}
 
-function closeCart(){
-  var o = document.getElementById("cartOvr");
-  if(o){
-    o.style.display="none";
-  }
+function addC(id,n,p,i,c){
+  var x=null;
+  for(var k=0;k<cart.length;k++){if(cart[k].id===id){x=cart[k];break}}
+  if(x){x.q++}else{cart.push({id:id,n:n,p:p,i:i,c:c,q:1})}
+  uBadge();openCart()
 }
+function rmC(id){cart=cart.filter(function(x){return x.id!==id});uBadge();dCart()}
+function uqC(id,q){if(q<1){rmC(id);return}for(var k=0;k<cart.length;k++){if(cart[k].id===id){cart[k].q=q;break}}uBadge();dCart()}
+function clrC(){cart=[];cStep="cart";cF={n:"",p:"",a:""};uBadge();dCart()}
+
+function openCart(){cStep="cart";document.getElementById("cartOvr").className="fixed inset-0 z-50 transition-all duration-300 opacity-100 visible";document.getElementById("cartDrw").classList.remove("-translate-x-full");document.body.style.overflow="hidden";dCart()}
+function closeCart(){document.getElementById("cartOvr").className="fixed inset-0 z-50 transition-all duration-300 opacity-0 invisible";document.getElementById("cartDrw").classList.add("-translate-x-full");document.body.style.overflow="";cStep="cart"}
 
 function dCart(){
-  var b = document.getElementById("cBdy");
-  if(!b) return;
+  var r=tot(),h=document.getElementById("cHdr"),b=document.getElementById("cBdy"),f=document.getElementById("cFtr");
+  var bk=cStep==="ck"?'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>':'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
+  var bf=cStep==="ck"?"cStep='cart';dCart()":"closeCart()";
+  h.innerHTML='<button onclick="'+bf+'" class="text-gray-400 hover:text-white p-1.5 rounded-lg hover:bg-gray-800"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">'+bk+'</svg></button><div class="flex items-center gap-2"><div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full '+(cStep==="cart"?"bg-bgreen-l scale-125":"bg-bgreen-l/60")+'"></div><div class="w-8 h-0.5 rounded-full '+(cStep==="ck"?"bg-bgreen-l":"bg-gray-700")+'"></div><div class="w-2.5 h-2.5 rounded-full '+(cStep==="ck"?"bg-bgreen-l scale-125":"bg-gray-700")+'"></div></div><h2 class="text-lg font-bold">'+(cStep==="cart"?"سلة المشتريات":"معلومات التوصيل")+"</h2>"+(cStep==="cart"&&r.t>0?'<span class="bg-bgreen text-white text-xs font-bold px-2 py-0.5 rounded-full">'+r.t+"</span>":"")+"</div>";
 
-  if(cart.length===0){
-    b.innerHTML = "<div style='padding:30px;text-align:center'>السلة فارغة 🛒</div>";
-    return;
+  if(cart.length===0&&cStep==="cart"){
+    b.innerHTML='<div class="flex flex-col items-center justify-center py-20 text-center"><div class="text-5xl mb-4 opacity-30">🛒</div><h3 class="font-bold text-lg mb-2">السلة فارغة</h3><p class="text-gray-500 text-sm mb-6">لم تضف أي منتجات بعد</p><button onclick="closeCart()" class="bg-bgreen text-white font-bold px-6 py-3 rounded-xl">تصفح المنتجات</button></div>';
+    f.classList.add("hidden");return
   }
 
-  var html = "";
-  cart.forEach(x=>{
-    html += `
-      <div style="margin:10px;padding:10px;background:#222;border-radius:10px">
-        <div>${esc(x.n)}</div>
-        <div>${x.p} DH</div>
-
-        <div style="display:flex;gap:10px;align-items:center">
-          <button onclick="uqC('${x.id}',${x.q+1})">+</button>
-          <span>${x.q}</span>
-          <button onclick="uqC('${x.id}',${x.q-1})">-</button>
-        </div>
-
-        <button onclick="rmC('${x.id}')">🗑 حذف</button>
-      </div>
-    `;
-  });
-
-  b.innerHTML = html;
+  if(cStep==="cart"){
+    f.classList.remove("hidden");
+    var it="";
+    for(var k=0;k<cart.length;k++){var x=cart[k];
+      it+='<div class="bg-gray-900/80 rounded-xl p-3 border border-gray-800 flex gap-3">';
+      it+='<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-800"><img src="'+x.i+'" class="w-full h-full object-cover"></div>';
+      it+='<div class="flex-1 min-w-0">';
+      it+='<h4 class="text-white text-sm font-bold line-clamp-1 mb-1">'+esc(x.n)+'</h4>';
+      it+='<p class="text-bgreen-l font-bold text-sm mb-2">'+x.p+' DH</p>';
+      it+='<div class="flex items-center justify-between">';
+      it+='<div class="flex items-center">';
+      it+='<button onclick="uqC('+x.id+','+(x.q+1)+')" class="w-8 h-8 bg-gray-800 hover:bg-gray-700 text-white rounded-l-lg flex items-center justify-center active:scale-90">+</button>';
+      it+='<span class="w-10 h-8 bg-gray-800 text-white text-sm font-bold flex items-center justify-center border-x border-gray-700">'+x.q+'</span>';
+      it+='<button onclick="uqC('+x.id+','+(x.q-1)+')" class="w-8 h-8 bg-gray-800 hover:bg-gray-700 text-white rounded-r-lg flex items-center justify-center active:scale-90">−</button>';
+      it+='</div>';
+      it+='<div class="flex items-center gap-2"><span class="text-white font-bold text-sm">'+(x.p*x.q)+' DH</span>';
+      it+='<button onclick="rmC('+x.id+')" class="text-red-400 p-1 rounded active:scale-90">🗑</button></div>';
+      it+='</div></div></div>'
+    }
+    b.innerHTML='<div class="p-4 space-y-3">'+it+'</div>';
+    f.innerHTML='<div class="space-y-3"><div class="flex justify-between text-sm"><span class="text-gray-400">المجموع ('+r.t+')</span><span class="text-white font-bold">'+r.s+' DH</span></div><div class="flex justify-between text-sm"><span class="text-gray-400">🚚 التوصيل</span><span class="text-amber-400 font-bold">+'+r.d+' DH</span></div><div class="border-t border-gray-700 pt-3 flex justify-between"><span class="text-white font-bold text-lg">الإجمالي</span><span class="text-bgreen-l font-black text-2xl">'+r.g+' DH</span></div><button onclick="cStep=\'ck\';dCart()" class="w-full bg-bgreen hover:bg-bgreen-d text-white font-bold py-3.5 rounded-xl text-base shadow-lg active:scale-95">متابعة الطلب ←</button><button onclick="clrC()" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-400 font-medium py-2.5 rounded-xl text-sm active:scale-95">🗑 إفراغ السلة</button></div>'
+  }else{
+    f.classList.remove("hidden");
+    var it2="";
+    for(var k=0;k<cart.length;k++){var x2=cart[k];it2+='<div class="flex justify-between text-sm"><span class="text-gray-300">'+esc(x2.n)+" × "+x2.q+'</span><span class="text-white font-bold">'+(x2.p*x2.q)+" DH</span></div>"}
+    b.innerHTML='<div class="p-4 space-y-5"><div class="bg-gray-900/80 rounded-xl p-3.5 border border-gray-800"><div class="flex justify-between mb-2"><span class="text-gray-400 text-xs">ملخص</span><button onclick="cStep=\'cart\';dCart()" class="text-bgreen-l text-xs font-bold">تعديل</button></div><div class="space-y-1.5">'+it2+'</div><div class="border-t border-gray-700 mt-2 pt-2 flex justify-between"><span class="text-white font-bold text-sm">💰 الإجمالي</span><span class="text-bgreen-l font-black text-lg">'+r.g+' DH</span></div></div>'
+    +'<div class="space-y-4"><h3 class="text-white font-bold">📋 معلومات التوصيل</h3>'
+    +'<div><label class="block text-gray-400 text-xs mb-1.5">👤 الاسم الكامل *</label><input type="text" placeholder="أحمد بنعلي" value="'+cF.n+'" oninput="cF.n=this.value" class="w-full bg-gray-900 border '+(cE.n?"border-red-500":"border-gray-700")+' rounded-xl px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-bgreen/30">'+(cE.n?'<p class="text-red-400 text-xs mt-1">⚠️ '+cE.n+'</p>':'')+'</div>'
+    +'<div><label class="block text-gray-400 text-xs mb-1.5">📞 رقم الهاتف *</label><input type="tel" dir="ltr" placeholder="0717657640" value="'+cF.p+'" oninput="cF.p=this.value" class="w-full bg-gray-900 border '+(cE.p?"border-red-500":"border-gray-700")+' rounded-xl px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-bgreen/30 text-left">'+(cE.p?'<p class="text-red-400 text-xs mt-1">⚠️ '+cE.p+'</p>':'')+'</div>'
+    +'<div><label class="block text-gray-400 text-xs mb-1.5">📍 العنوان *</label><textarea placeholder="الدار البيضاء، حي المعاريف..." oninput="cF.a=this.value" rows="3" class="w-full bg-gray-900 border '+(cE.a?"border-red-500":"border-gray-700")+' rounded-xl px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-bgreen/30 resize-none">'+cF.a+'</textarea>'+(cE.a?'<p class="text-red-400 text-xs mt-1">⚠️ '+cE.a+'</p>':'')+'</div>'
+    +'</div><div class="bg-bgreen/10 border border-bgreen/20 rounded-xl p-3"><p class="text-bgreen-l text-xs">💡 بعد التأكيد سيتم توجيهك إلى واتساب</p></div></div>';
+    f.innerHTML='<div class="space-y-3"><div class="flex justify-between"><span class="text-white font-bold">💰 الإجمالي</span><div><span class="text-bgreen-l font-black text-xl">'+r.g+' DH</span><span class="text-gray-500 text-xs block">شامل +'+r.d+'</span></div></div><button onclick="confirmO()" class="flex items-center justify-center gap-2 w-full bg-bgreen hover:bg-bgreen-d text-white font-bold py-3.5 rounded-xl text-base shadow-lg active:scale-95">💬 تأكيد الطلب عبر واتساب</button></div>'
+  }
 }
+
+function confirmO(){
+  cE={n:"",p:"",a:""};var ok=true;
+  if(!cF.n.trim()){cE.n="الاسم مطلوب";ok=false}
+  if(!cF.p.trim()){cE.p="رقم الهاتف مطلوب";ok=false}else if(!/^[0-9+\s]{8,15}$/.test(cF.p.trim())){cE.p="رقم غير صحيح";ok=false}
+  if(!cF.a.trim()){cE.a="العنوان مطلوب";ok=false}
+  if(!ok){dCart();return}
+  var r=tot(),m="🛒 *طلب جديد — Billiard Store*\n━━━━━━━━━━━━\n\n";
+  for(var k=0;k<cart.length;k++){var x=cart[k];m+=(k+1)+". "+x.n+"\n   "+x.q+" × "+x.p+" = "+(x.p*x.q)+" DH\n"}
+  m+="\n📦 المجموع: *"+r.s+" DH*\n🚚 التوصيل: *"+r.d+" DH*\n💰 الإجمالي: *"+r.g+" DH*\n\n━━━━━━━━━━━━\n📋 *الزبون*\n👤 "+cF.n+"\n📞 "+cF.p+"\n📍 "+cF.a;
+  window.open("https://wa.me/"+PHONE+"?text="+encodeURIComponent(m),"_blank");
+  clrC();closeCart()
+}
+
+// ── عرض المنتجات فـ الصفحة ──
+function rSales(){
+  var g=document.getElementById("salesGrid");if(!g)return;
+  var h="";
+  for(var k=0;k<SALES.length;k++){
+    var p=SALES[k],pk=1000+k;
+    h+='<div class="relative bg-gradient-to-br from-gray-900 to-bgray rounded-2xl overflow-hidden border border-red-500/20 hover:border-red-500/50 group transition-all flex flex-row sm:flex-col">';
+    h+='<div class="absolute top-0 right-0 z-10"><div class="bg-red-500 text-white font-black text-[9px] sm:text-sm px-2 py-1 sm:px-3.5 sm:py-1.5 rounded-bl-xl sm:rounded-bl-2xl">-'+p.discount+'%</div></div>';
+    h+='<div class="relative overflow-hidden bg-bblack w-28 sm:w-auto flex-shrink-0 sm:aspect-[4/3]"><img src="'+p.img+'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%20width=%22200%22%20height=%22200%22><rect fill=%22%23333%22 width=%22200%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22>🎱</text></svg>\'">';
+    if(p.badge)h+='<div class="absolute top-2 left-2 hidden sm:block"><div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg">'+p.badge+'</div></div>';
+    h+='</div>';
+    h+='<div class="flex flex-col justify-between flex-1 p-3 sm:p-4 min-w-0"><div>';
+    if(p.badge)h+='<span class="bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-[8px] px-1.5 py-0.5 rounded sm:hidden inline-block mb-1">'+p.badge+'</span>';
+    h+='<h3 class="text-xs sm:text-base font-bold text-white mb-1 group-hover:text-red-400 line-clamp-2">'+esc(p.name)+'</h3>';
+    h+='<p class="text-gray-500 text-[10px] sm:text-xs line-clamp-1 mb-2">'+esc(p.desc)+'</p></div>';
+    h+='<div class="mb-2"><div class="flex items-end gap-1.5"><span class="text-base sm:text-xl font-black text-red-400">'+p.price+' <span class="text-[9px] sm:text-xs text-gray-500">DH</span></span><span class="text-[10px] text-gray-600 line-through">'+p.oldPrice+' DH</span></div>';
+    h+='<span class="text-[9px] text-red-400 font-bold">وفّر '+(p.oldPrice-p.price)+' DH</span></div>';
+    h+='<button onclick="addSale('+k+')" class="inline-flex items-center gap-1 bg-bgreen hover:bg-bgreen-d text-white font-bold px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl text-[11px] sm:text-sm shadow-lg active:scale-95">+ أضف للسلة</button>';
+    h+='</div></div>'
+  }
+  g.innerHTML=h
+}
+
+function rProds(cat){
+  var g=document.getElementById("productsGrid");if(!g)return;
+  var h="";
+  for(var k=0;k<PRODUCTS.length;k++){
+    var p=PRODUCTS[k];
+    if(cat!=="all"&&p.cat!==cat)continue;
+    h+='<div class="bg-gradient-to-br from-gray-900 to-bgray rounded-2xl overflow-hidden border border-gray-800 hover:border-bgreen/30 group transition-all flex flex-row sm:flex-col">';
+    h+='<div class="relative overflow-hidden bg-bblack w-28 sm:w-auto flex-shrink-0 sm:aspect-[4/3]"><img src="'+p.img+'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%20width=%22200%22 height=%22200%22><rect fill=%22%23333%22 width=%22200%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22>'+(p.cat==="billiard"?"🎱":"⚽")+'</text></svg>\'">';
+    h+='<div class="absolute bottom-2 left-2 bg-bgreen text-white font-bold px-2.5 py-1 rounded-lg text-xs shadow-lg hidden sm:block">'+p.price+' DH</div></div>';
+    h+='<div class="flex flex-col justify-between flex-1 p-3 sm:p-4 min-w-0"><div>';
+    h+='<div class="flex items-center gap-1 mb-1 sm:hidden"><span class="text-xs">'+(p.cat==="billiard"?"🎱":"⚽")+'</span><span class="text-gray-500 text-[9px]">'+(p.cat==="billiard"?"بيلياردو":"بابي فوت")+'</span></div>';
+    h+='<h3 class="text-xs sm:text-base font-bold text-white mb-1 group-hover:text-bgreen-l line-clamp-2">'+esc(p.name)+'</h3>';
+    h+='<p class="text-gray-500 text-[10px] sm:text-xs line-clamp-1 mb-2">'+esc(p.desc)+'</p></div>';
+    h+='<div class="flex items-center justify-between gap-1.5 mt-auto"><span class="text-base sm:text-xl font-black text-bgreen-l">'+p.price+' <span class="text-[9px] sm:text-xs text-gray-500">DH</span></span>';
+    h+='<button onclick="addProd('+k+')" class="inline-flex items-center gap-1 bg-bgreen hover:bg-bgreen-d text-white font-bold px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl text-[11px] sm:text-sm shadow-lg active:scale-95">+ أضف للسلة</button>';
+    h+='</div></div></div>'
+  }
+  g.innerHTML=h
+}
+
+function filterProducts(cat){
+  var bs=document.querySelectorAll(".fbtn");
+  for(var k=0;k<bs.length;k++){
+    var a=bs[k].getAttribute("data-f")===cat;
+    if(a){bs[k].className="fbtn bg-bgreen text-white shadow-lg px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm active:scale-95"}
+    else{bs[k].className="fbtn bg-gray-800 text-gray-400 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm active:scale-95"}
+  }
+  rProds(cat)
+}
+
+// Navbar scroll
+window.onscroll=function(){
+  var n=document.getElementById("navbar");
+  n.style.cssText=window.scrollY>30?"background:rgba(10,10,10,.95);backdrop-filter:blur(12px);box-shadow:0 4px 20px rgba(0,0,0,.3)":"background:transparent"
+};
+
+// Mobile menu
+var mO=false;
+function toggleMenu(){
+  mO=!mO;
+  var o=document.getElementById("mobileMenu"),d=document.getElementById("menuDrawer"),ic=document.getElementById("menuIcon");
+  if(mO){
+    o.className="fixed inset-0 z-40 md:hidden transition-all duration-300 opacity-100 visible";
+    d.classList.remove("translate-x-full");
+    ic.innerHTML='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
+    document.body.style.overflow="hidden"
+  }else{
+    o.className="fixed inset-0 z-40 md:hidden transition-all duration-300 opacity-0 invisible";
+    d.classList.add("translate-x-full");
+    ic.innerHTML='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
+    document.body.style.overflow=""
+  }
+}
+window.onresize=function(){if(window.innerWidth>=768&&mO)toggleMenu()};
+
+// ── تشغيل! ──
+rSales();
+rProds();
+filterProducts("all");
 </script>
+
+</body>
+</html>
