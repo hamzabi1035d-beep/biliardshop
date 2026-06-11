@@ -1,53 +1,12 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Billiard Store Morocco</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-
-<script>
-tailwind.config={
-  theme:{
-    extend:{
-      colors:{
-        'bgreen':'#1a8f3e',
-        'bgreen-d':'#147030',
-        'bgreen-l':'#22c55e',
-        'bblack':'#0a0a0a',
-        'bdark':'#1a1a1a',
-        'bgray':'#2a2a2a'
-      }
-    }
-  }
-}
-</script>
-
-<style>
-*{font-family:'Cairo',sans-serif}
-html{scroll-behavior:smooth}
-body{direction:rtl}
-.line-clamp-1{overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
-.line-clamp-2{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-</style>
-</head>
-
-<body class="bg-bblack text-white">
-
-<!-- ================= DATA ================= -->
 <script>
 var PHONE = "212717657640";
 var DELIVERY = 50;
 
-// 🔥 IMPORTANT FIX: GLOBAL STATE
 var cart = [];
 var cStep = "cart";
 var cF = { n:"", p:"", a:"" };
 var cE = { n:"", p:"", a:"" };
 
-// PRODUCTS
 var PRODUCTS = [
   {
     id:1,
@@ -67,7 +26,6 @@ var PRODUCTS = [
   }
 ];
 
-// SALES
 var SALES = [
   {
     name:"طقم كرات بيلياردو 16 كرة",
@@ -80,33 +38,34 @@ var SALES = [
     badge:"الأكثر مبيعاً 🔥"
   }
 ];
-</script>
 
-<!-- ================= CART FUNCTIONS ================= -->
-<script>
+// ================= CORE FIX =================
+
 function esc(s){
-  return String(s)
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;");
+  return String(s).replace(/&/g,"&amp;")
+                  .replace(/</g,"&lt;")
+                  .replace(/>/g,"&gt;");
 }
 
-// FIXED addProd (no duplicate function anymore)
+// FIX: add product
 function addProd(idx){
   var p = PRODUCTS[idx];
   addC(p.id, p.name, p.price, p.img, p.cat);
 }
 
+// FIX: add sale
 function addSale(idx){
   var p = SALES[idx];
   addC("sale_"+idx, p.name, p.price, p.img, p.cat);
 }
 
+// CART CORE
 function addC(id,n,p,i,c){
   var x = cart.find(e=>e.id===id);
   if(x) x.q++;
   else cart.push({id,n,p,i,c,q:1});
   uBadge();
+  dCart();
 }
 
 function rmC(id){
@@ -118,89 +77,86 @@ function rmC(id){
 function uqC(id,q){
   if(q<1){ rmC(id); return; }
   var x = cart.find(e=>e.id===id);
-  if(x) x.q=q;
+  if(x) x.q = q;
   uBadge();
   dCart();
 }
 
 function clrC(){
   cart = [];
-  cStep="cart";
-  cF={n:"",p:"",a:""};
   uBadge();
   dCart();
 }
 
+// TOTAL
 function tot(){
   var t=0,s=0;
   cart.forEach(x=>{
-    t+=x.q;
-    s+=x.q*x.p;
+    t += x.q;
+    s += x.q*x.p;
   });
   return {t,s,d:cart.length?DELIVERY:0,g:s+(cart.length?DELIVERY:0)};
 }
 
+// BADGE
 function uBadge(){
   var r = tot();
   var b = document.getElementById("cartBadge");
+  if(!b) return;
 
   if(r.t>0){
     b.className="absolute -top-1 -left-1 bg-red-500 w-5 h-5 flex items-center justify-center rounded-full text-xs";
     b.textContent = r.t>9?"+9":r.t;
-  } else b.className="hidden";
+  }else{
+    b.className="hidden";
+  }
 }
-</script>
 
-<!-- ================= CART UI (simplified safe) ================= -->
-<script>
-function openCart(){ document.getElementById("cartOvr").style.display="block"; dCart(); }
-function closeCart(){ document.getElementById("cartOvr").style.display="none"; }
+// ================= CART UI =================
+
+function openCart(){
+  var o = document.getElementById("cartOvr");
+  if(o){
+    o.classList.remove("hidden");
+    o.style.display="block";
+  }
+  dCart();
+}
+
+function closeCart(){
+  var o = document.getElementById("cartOvr");
+  if(o){
+    o.style.display="none";
+  }
+}
 
 function dCart(){
-  var r = tot();
   var b = document.getElementById("cBdy");
+  if(!b) return;
 
   if(cart.length===0){
-    b.innerHTML = "<div class='p-10 text-center'>السلة فارغة 🛒</div>";
+    b.innerHTML = "<div style='padding:30px;text-align:center'>السلة فارغة 🛒</div>";
     return;
   }
 
-  var html="";
+  var html = "";
   cart.forEach(x=>{
-    html+=`
-    <div style="margin:10px;padding:10px;background:#222;border-radius:10px">
-      <div>${esc(x.n)}</div>
-      <div>${x.p} DH</div>
-      <div>
-        <button onclick="uqC('${x.id}',${x.q+1})">+</button>
-        <span>${x.q}</span>
-        <button onclick="uqC('${x.id}',${x.q-1})">-</button>
+    html += `
+      <div style="margin:10px;padding:10px;background:#222;border-radius:10px">
+        <div>${esc(x.n)}</div>
+        <div>${x.p} DH</div>
+
+        <div style="display:flex;gap:10px;align-items:center">
+          <button onclick="uqC('${x.id}',${x.q+1})">+</button>
+          <span>${x.q}</span>
+          <button onclick="uqC('${x.id}',${x.q-1})">-</button>
+        </div>
+
+        <button onclick="rmC('${x.id}')">🗑 حذف</button>
       </div>
-      <button onclick="rmC('${x.id}')">🗑</button>
-    </div>`;
+    `;
   });
 
   b.innerHTML = html;
 }
 </script>
-
-<!-- ================= UI (minimal demo) ================= -->
-<div style="padding:20px">
-<h2>Products</h2>
-
-<button onclick="addProd(0)">Add Ball</button>
-<button onclick="addProd(1)">Add Glove</button>
-
-<hr>
-
-<button onclick="openCart()">Open Cart 🛒 <span id="cartBadge"></span></button>
-</div>
-
-<!-- CART -->
-<div id="cartOvr" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000">
-  <button onclick="closeCart()">Close</button>
-  <div id="cBdy"></div>
-</div>
-
-</body>
-</html>
