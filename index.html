@@ -186,6 +186,7 @@ var DELIVERY = 50;
 
 var PRODUCTS = [
   {
+    id:1,
     name:"كرة بابي فوت",
     price:250,
     desc:"كرة احترافية",
@@ -193,6 +194,7 @@ var PRODUCTS = [
     cat:"foosball"
   },
   {
+    id:2,
     name:"قوادس",
     price:80,
     desc:"قفاز احترافي",
@@ -209,7 +211,10 @@ var SALES = [
 ];
 
 // ── السلة ──
-var cart=[], cStep="cart", cF={n:"",p:"",a:""}, cE={n:"",p:"",a:""};
+function addProd(idx){
+  var p = PRODUCTS[idx];
+  addC(idx, p.name, p.price, p.img, p.cat);
+}
 
 function tot(){
   var t=0,s=0;
